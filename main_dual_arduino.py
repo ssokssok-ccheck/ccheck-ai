@@ -3,12 +3,14 @@
 import cv2
 import json
 import time
+import uuid
 from datetime import datetime
 
 from arduino_serial import ArduinoSerial
 from ai_classifier import classify_frame
 from decision_logic import decide_disposal
-from config import STATION_ID
+from config import STATION_ID, LOCATION, ITEM_TYPE_TO_CATEGORY
+import onem2m_client
 
 
 SENSOR_PORT = "/dev/cu.usbmodem3CDC75484A642"    # Arduino A: sensorData 보내는 아두이노
@@ -30,35 +32,40 @@ def make_arduino_command(decision_result):
     }
 
 
+def make_event_id():
+    return f"evt_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:4]}"
+
+
 def make_classification_event(ai_result, sensor_data, decision_result):
     return {
-        "type": "classificationEvent",
-        "stationId": STATION_ID,
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "event_id": make_event_id(),
+        "device_id": STATION_ID,
+        "location": LOCATION,
 
-        "itemType": ai_result["itemType"],
-        "itemName": ai_result["itemName"],
+        "item": ai_result["itemName"],
+        "category": ITEM_TYPE_TO_CATEGORY[ai_result["itemType"]],
+        "confidence": ai_result["aiScore"],
 
-        "objectDetected": sensor_data["objectDetected"],
-        "weight": sensor_data["weight"],
-        "moisture": sensor_data["moisture"],
-        "moistureValue": sensor_data["moistureValue"],
+        "weight_g": sensor_data["weight"],
+        "is_wet": sensor_data["moisture"],
+        "has_content": sensor_data["moisture"],
 
-        "decision": decision_result["decision"],
-        "targetBin": decision_result["targetBin"],
-        "success": decision_result["success"]
+        "decision": decision_result["targetBin"],
+        "status": "success" if decision_result["success"] else "guide_only",
+
+        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
 
 def make_bin_status_event(bin_status_data):
     return {
-        "type": "binStatus",
-        "stationId": STATION_ID,
-        "timestamp": bin_status_data.get(
+        "device_id": STATION_ID,
+        "location": LOCATION,
+        "bin_fill": bin_status_data["binFillLevels"],
+        "created_at": bin_status_data.get(
             "timestamp",
             datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        ),
-        "binFillLevels": bin_status_data["binFillLevels"]
+        )
     }
 
 
@@ -164,7 +171,7 @@ while True:
     print("\n========== 4. Arduino B로 보낸 command ==========")
     print(json.dumps(arduino_command, ensure_ascii=False, indent=2))
 
-    # 6. oneM2M 플랫폼에 보낼 classificationEvent 생성 및 출력
+    # 6. oneM2M 플랫폼에 보낼 classificationEvent 생성 및 전송
     classification_event = make_classification_event(
         ai_result=ai_result,
         sensor_data=sensor_data,
@@ -173,6 +180,8 @@ while True:
 
     print("\n========== 5. oneM2M 플랫폼에 보낼 classificationEvent ==========")
     print(json.dumps(classification_event, ensure_ascii=False, indent=2))
+
+    onem2m_client.send_classification_event(LOCATION, STATION_ID, classification_event)
 
     # 7. Arduino B가 동작 후 보내는 binStatus 기다리기
     print("\nArduino B에서 binStatus 기다리는 중...")
@@ -190,6 +199,8 @@ while True:
 
     print("\n========== 6. oneM2M 플랫폼에 보낼 binStatus ==========")
     print(json.dumps(bin_status_event, ensure_ascii=False, indent=2))
+
+    onem2m_client.send_bin_status(LOCATION, STATION_ID, bin_status_event)
     print("====================================================\n")
 
 
