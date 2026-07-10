@@ -5,6 +5,17 @@ LOCATION = "dongguk_univ"
 PET_BOTTLE_WEIGHT_LIMIT = 70  # g, 실제 테스트 후 수정
 CAN_WEIGHT_LIMIT = 60         # g, 실제 테스트 후 수정
 
+# oneM2M에 기록할 품목별 평균 무게 (g)
+ITEM_TYPE_AVG_WEIGHT = {
+    "PET_BOTTLE": 14,  # 500ml 생수 페트병 평균
+    "CAN": 15,
+    "PAPER_CUP": 5,
+    "RECEIPT": 1,
+    "GLASS_BOTTLE": 400,
+    "BROKEN_GLASS": 320,
+    "UNKNOWN": 0,
+}
+
 # oneM2M (Mobius) 설정
 ONEM2M_CSE_BASE = "https://onem2m.iotcoss.ac.kr/Mobius"
 ONEM2M_ORIGIN = "ccheck"

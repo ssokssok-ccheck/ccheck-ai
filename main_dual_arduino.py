@@ -9,7 +9,7 @@ from datetime import datetime
 from arduino_serial import ArduinoSerial
 from ai_classifier import classify_frame
 from decision_logic import decide_disposal
-from config import STATION_ID, LOCATION, ITEM_TYPE_TO_CATEGORY
+from config import STATION_ID, LOCATION, ITEM_TYPE_TO_CATEGORY, ITEM_TYPE_AVG_WEIGHT
 import onem2m_client
 
 
@@ -46,7 +46,8 @@ def make_classification_event(ai_result, sensor_data, decision_result):
         "category": ITEM_TYPE_TO_CATEGORY[ai_result["itemType"]],
         "confidence": ai_result["aiScore"],
 
-        "weight_g": sensor_data["weight"],
+        # 품목별 평균 무게로 oneM2M에 기록한다.
+        "weight_g": ITEM_TYPE_AVG_WEIGHT.get(ai_result["itemType"], sensor_data["weight"]),
         "is_wet": sensor_data["moisture"],
         "has_content": sensor_data["moisture"],
 
