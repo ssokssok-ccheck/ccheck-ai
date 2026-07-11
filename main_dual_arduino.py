@@ -63,10 +63,7 @@ def make_bin_status_event(bin_status_data):
         "device_id": STATION_ID,
         "location": LOCATION,
         "bin_fill": bin_status_data["binFillLevels"],
-        "created_at": bin_status_data.get(
-            "timestamp",
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        )
+        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
 

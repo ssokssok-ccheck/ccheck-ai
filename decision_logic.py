@@ -1,7 +1,4 @@
 
-from config import PET_BOTTLE_WEIGHT_LIMIT, CAN_WEIGHT_LIMIT
-
-
 def decide_disposal(item_type, weight, moisture):
     """
     CLIP 품목 결과 + Arduino 센서값을 이용해서
@@ -9,7 +6,7 @@ def decide_disposal(item_type, weight, moisture):
     """
 
     if item_type == "PET_BOTTLE":
-        if weight >= PET_BOTTLE_WEIGHT_LIMIT:
+        if moisture:
             return {
                 "decision": "GUIDE_ONLY",
                 "targetBin": None,
@@ -23,7 +20,7 @@ def decide_disposal(item_type, weight, moisture):
         }
 
     if item_type == "CAN":
-        if weight >= CAN_WEIGHT_LIMIT:
+        if moisture:
             return {
                 "decision": "GUIDE_ONLY",
                 "targetBin": None,

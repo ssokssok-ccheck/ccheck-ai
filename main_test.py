@@ -18,7 +18,6 @@ def get_fake_sensor_data(item_type):
     if item_type == "PET_BOTTLE":
         return {
             "type": "sensorData",
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "objectDetected": True,
             "weight": 135.2,
             "moisture": False,
@@ -28,7 +27,6 @@ def get_fake_sensor_data(item_type):
     if item_type == "CAN":
         return {
             "type": "sensorData",
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "objectDetected": True,
             "weight": 16.5,
             "moisture": False,
@@ -38,7 +36,6 @@ def get_fake_sensor_data(item_type):
     if item_type == "PAPER_CUP":
         return {
             "type": "sensorData",
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "objectDetected": True,
             "weight": 12.0,
             "moisture": True,
@@ -48,7 +45,6 @@ def get_fake_sensor_data(item_type):
     if item_type == "RECEIPT":
         return {
             "type": "sensorData",
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "objectDetected": True,
             "weight": 2.0,
             "moisture": False,
@@ -57,7 +53,6 @@ def get_fake_sensor_data(item_type):
 
     return {
         "type": "sensorData",
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "objectDetected": True,
         "weight": 0,
         "moisture": False,
