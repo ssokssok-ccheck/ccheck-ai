@@ -11,6 +11,8 @@ ITEM_TYPE_AVG_WEIGHT = {
     "CAN": 15,
     "PAPER_CUP": 5,
     "RECEIPT": 1,
+    "TOOTHBRUSH": 15,
+    "MILK_CARTON": 7,
     "GLASS_BOTTLE": 400,
     "BROKEN_GLASS": 320,
     "UNKNOWN": 0,
@@ -25,6 +27,8 @@ ITEM_NAME_KO = {
     "CAN": "캔",
     "PAPER_CUP": "종이컵",
     "RECEIPT": "영수증",
+    "TOOTHBRUSH": "칫솔",
+    "MILK_CARTON": "우유팩",
     "GLASS_BOTTLE": "유리병",
     "BROKEN_GLASS": "깨진 유리",
     "UNKNOWN": "알 수 없음"
@@ -36,6 +40,8 @@ ITEM_TYPE_TO_CATEGORY = {
     "CAN": "can",
     "PAPER_CUP": "paper",
     "RECEIPT": "general",
+    "TOOTHBRUSH": "general",
+    "MILK_CARTON": "paper_pack",
     "GLASS_BOTTLE": "glass",
     "BROKEN_GLASS": "glass",
     "UNKNOWN": "general"

@@ -54,7 +54,21 @@ def decide_disposal(item_type, weight, moisture):
             "success": True
         }
 
-    # 유리병, 깨진 유리, 알 수 없음 등
+    if item_type == "TOOTHBRUSH":
+        return {
+            "decision": "AUTO_SORT",
+            "targetBin": "general",
+            "success": True
+        }
+
+    if item_type == "MILK_CARTON":
+        return {
+            "decision": "GUIDE_ONLY",
+            "targetBin": None,
+            "success": False
+        }
+
+    # 우유팩, 유리병, 깨진 유리, 알 수 없음 등
     return {
         "decision": "GUIDE_ONLY",
         "targetBin": None,

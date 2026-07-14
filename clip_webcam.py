@@ -26,6 +26,27 @@ label_to_item_type = {
     "a photo of a paper receipt": "RECEIPT",
     "a photo of a printed receipt": "RECEIPT",
 
+    "a photo of a toothbrush": "TOOTHBRUSH",
+    "a photo of a used toothbrush": "TOOTHBRUSH",
+    "a photo of a plastic toothbrush": "TOOTHBRUSH",
+    "a photo of a green toothbrush": "TOOTHBRUSH",
+    "a photo of a toothbrush with a white handle": "TOOTHBRUSH",
+    "a photo of a green and white toothbrush": "TOOTHBRUSH",
+    "a photo of a toothbrush with blue bristles": "TOOTHBRUSH",
+    "a photo of a toothbrush with a white handle and blue bristles": "TOOTHBRUSH",
+    "a photo of a white toothbrush with blue bristles": "TOOTHBRUSH",
+    "a close-up photo of blue toothbrush bristles": "TOOTHBRUSH",
+    "a photo of a blue and white toothbrush": "TOOTHBRUSH",
+    "a close-up photo of a toothbrush": "TOOTHBRUSH",
+    "a photo of a toothbrush on a table": "TOOTHBRUSH",
+    "a photo of a bathroom toothbrush": "TOOTHBRUSH",
+    "a photo of a toothbrush handle": "TOOTHBRUSH",
+    "a photo of toothbrush bristles": "TOOTHBRUSH",
+
+    "a photo of a white milk carton": "MILK_CARTON",
+    "a photo of a Seoul Milk carton": "MILK_CARTON",
+    "a photo of a Korean white milk carton": "MILK_CARTON",
+
     "a photo of a glass bottle": "GLASS_BOTTLE",
     "a photo of broken glass": "BROKEN_GLASS",
     "a photo of unknown trash": "UNKNOWN"
@@ -36,6 +57,8 @@ item_type_to_korean = {
     "CAN": "캔",
     "PAPER_CUP": "종이컵",
     "RECEIPT": "영수증",
+    "TOOTHBRUSH": "칫솔",
+    "MILK_CARTON": "서울우유 하얀 우유팩",
     "GLASS_BOTTLE": "유리병",
     "BROKEN_GLASS": "깨진 유리",
     "UNKNOWN": "알 수 없음"
@@ -69,6 +92,9 @@ print("스페이스바: 현재 화면 캡처 후 CLIP 분류")
 print("q: 종료")
 
 
+last_result_text = "Press SPACE to classify"
+
+
 while True:
     ret, frame = cap.read()
 
@@ -76,14 +102,37 @@ while True:
         print("프레임을 읽을 수 없습니다.")
         break
 
-    cv2.imshow("Sortree CLIP Webcam - Press SPACE", frame)
+    display_frame = frame.copy()
+    cv2.putText(
+        display_frame,
+        last_result_text,
+        (20, 35),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.8,
+        (0, 255, 0),
+        2
+    )
+    cv2.imshow("Sortree CLIP Webcam - Press SPACE", display_frame)
 
-    key = cv2.waitKey(1) & 0xFF
+    key = cv2.waitKey(30) & 0xFF
 
     if key == ord("q"):
         break
 
     if key == ord(" "):
+        print("\nCLIP 분류 중...")
+        cv2.putText(
+            display_frame,
+            "Classifying...",
+            (20, 70),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.8,
+            (0, 255, 255),
+            2
+        )
+        cv2.imshow("Sortree CLIP Webcam - Press SPACE", display_frame)
+        cv2.waitKey(1)
+
         # OpenCV는 BGR이라 RGB로 변환
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         image = Image.fromarray(rgb_frame)
@@ -108,6 +157,7 @@ while True:
 
         item_type = label_to_item_type[best_label]
         item_name = item_type_to_korean[item_type]
+        last_result_text = f"{item_type} {best_score:.4f}"
 
         print("\n==============================")
         print("CLIP 분류 결과")
@@ -117,8 +167,10 @@ while True:
         print(f"한글 품목명: {item_name}")
         print(f"점수: {best_score:.4f}")
 
-        print("\n전체 후보 점수:")
-        for label, score in zip(candidate_labels, probs[0]):
+        print("\n상위 후보 점수:")
+        top_scores, top_indices = torch.topk(probs[0], k=min(5, len(candidate_labels)))
+        for score, idx in zip(top_scores, top_indices):
+            label = candidate_labels[idx.item()]
             print(f"{label}: {score.item():.4f}")
 
         print("==============================\n")

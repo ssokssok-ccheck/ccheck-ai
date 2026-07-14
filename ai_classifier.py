@@ -26,6 +26,18 @@ label_to_item_type = {
     "a photo of a paper receipt": "RECEIPT",
     "a photo of a printed receipt": "RECEIPT",
 
+    "a photo of a toothbrush": "TOOTHBRUSH",
+    "a photo of a used toothbrush": "TOOTHBRUSH",
+    "a photo of a plastic toothbrush": "TOOTHBRUSH",
+    "a photo of a toothbrush with blue bristles": "TOOTHBRUSH",
+    "a photo of a toothbrush with a white handle and blue bristles": "TOOTHBRUSH",
+    "a photo of a white toothbrush with blue bristles": "TOOTHBRUSH",
+    "a photo of a blue and white toothbrush": "TOOTHBRUSH",
+
+    "a photo of a white milk carton": "MILK_CARTON",
+    "a photo of a Seoul Milk carton": "MILK_CARTON",
+    "a photo of a Korean white milk carton": "MILK_CARTON",
+
     "a photo of a glass bottle": "GLASS_BOTTLE",
     "a photo of broken glass": "BROKEN_GLASS",
     "a photo of unknown trash": "UNKNOWN"
