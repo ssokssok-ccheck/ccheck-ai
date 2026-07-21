@@ -13,8 +13,8 @@ from config import STATION_ID, LOCATION, ITEM_TYPE_TO_CATEGORY, ITEM_TYPE_AVG_WE
 import onem2m_client
 
 
-SENSOR_PORT = "/dev/cu.usbmodem3CDC75484A642"    # Arduino A: sensorData 보내는 아두이노
-CONTROL_PORT = "/dev/cu.usbmodem3CDC75438DE4"   # Arduino B: command 받기 + binStatus 보내는 아두이노
+SENSOR_PORT = "COM5"  # Arduino A: sensorData 보내는 아두이노    # Arduino A: sensorData 보내는 아두이노
+CONTROL_PORT = "COM6"   # Arduino B: command 받기 + binStatus 보내는 아두이노
 
 BAUDRATE = 9600
 
@@ -96,7 +96,7 @@ sensor_arduino = ArduinoSerial(SENSOR_PORT, BAUDRATE, name="Arduino A 센서")
 control_arduino = ArduinoSerial(CONTROL_PORT, BAUDRATE, name="Arduino B 제어")
 
 
-camera_index = 0
+camera_index = 1
 cap = cv2.VideoCapture(camera_index)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)

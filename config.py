@@ -20,7 +20,7 @@ ITEM_TYPE_AVG_WEIGHT = {
 
 # oneM2M (Mobius) 설정
 ONEM2M_CSE_BASE = "https://onem2m.iotcoss.ac.kr/Mobius"
-ONEM2M_ORIGIN = "ccheck"
+ONEM2M_ORIGIN = "SOrigin"
 
 ITEM_NAME_KO = {
     "PET_BOTTLE": "페트병",

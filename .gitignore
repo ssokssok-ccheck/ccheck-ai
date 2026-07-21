@@ -4,3 +4,4 @@ __pycache__/
 .DS_Store
 .env
 secrets.py
+onem2m_secrets.py
